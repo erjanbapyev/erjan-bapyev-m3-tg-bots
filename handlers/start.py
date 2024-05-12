@@ -1,13 +1,11 @@
-import sqlite3
-
 from aiogram import Router, types
 from aiogram.filters import Command
 
 from config import bot, ADMIN_ID, MEDIA_PATH
 from const import START_MENU_TEXT
-from database import sql_queries
 from database.a_db import AsyncDatabase
-from keyboards.start import start_menu_keyboard
+from database import sql_quaries
+from keyboards.start import start_menu_keyboard_registration
 
 router = Router()
 
@@ -16,8 +14,9 @@ router = Router()
 async def start_menu(message: types.Message,
                      db=AsyncDatabase()):
     print(message)
+    print(message.from_user.id)
     await db.execute_query(
-        query=sql_queries.INSERT_USER_QUERY,
+        query=sql_quaries.INSERT_USER_QUERY,
         params=(
             None,
             message.from_user.id,
@@ -27,35 +26,33 @@ async def start_menu(message: types.Message,
         ),
         fetch='none'
     )
-    await bot.send_message(
-        chat_id=message.chat.id,
-        text=f"Hello {message.from_user.first_name}"
-    )
-
-    animation_file = types.FSInputFile(MEDIA_PATH + "bot-ani.gif")
+    animation_file = types.FSInputFile(MEDIA_PATH + "bot.gif")
     await bot.send_animation(
-        chat_id=message.chat.id,
+        chat_id=message.from_user.id,
         animation=animation_file,
         caption=START_MENU_TEXT.format(
             user=message.from_user.first_name
         ),
-        reply_markup=await start_menu_keyboard()
+        reply_markup=await start_menu_keyboard_registration()
     )
-@router.message(lambda message: message.text == "SK")
+
+
+@router.message(lambda message: message.text == "Admin99")
 async def admin_start_menu(message: types.Message,
                            db=AsyncDatabase()):
+    print(ADMIN_ID)
     if int(ADMIN_ID) == message.from_user.id:
+        users = await db.execute_query(query=sql_quaries.SELECT_USERS, fetch="all")
         await bot.send_message(
             chat_id=message.from_user.id,
-            text="Welcome!"
+            text="Here is your Admin page"
         )
-        users_info = await db.execute_query(query=sql_queries.SELECT_USER, fetch='all')
         await bot.send_message(
             chat_id=message.from_user.id,
-            text=f'Список пользователей:\n{users_info}'
-    )
+            text=f"{users}"
+            )
     else:
         await bot.send_message(
             chat_id=message.from_user.id,
-            text="Nope"
+            text="You have not access!!"
         )
