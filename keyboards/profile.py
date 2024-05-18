@@ -6,7 +6,7 @@ from aiogram.types import (
 
 async def my_profile_keyboard():
     update_button = InlineKeyboardButton(
-        text="Update 🙈",
+        text="Update 🟡",
         callback_data=f"update_profile"
     )
     delete_button = InlineKeyboardButton(

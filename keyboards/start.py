@@ -4,24 +4,34 @@ from aiogram.types import (
 )
 
 
-async def start_menu_keyboard_registration():
+async def start_menu_keyboard():
     registration_button = InlineKeyboardButton(
-        text="Registration",
+        text="Registration 🔥",
         callback_data="registration"
     )
     my_profile_button = InlineKeyboardButton(
-        text="My profile",
+        text="My Profile 😎",
         callback_data="my_profile"
     )
-    profile_button = InlineKeyboardButton(
-        text="View profile",
+    profiles_button = InlineKeyboardButton(
+        text="View Profiles 🧲",
         callback_data="view_profiles"
+    )
+    reference_button = InlineKeyboardButton(
+        text="Reference Menu 💵",
+        callback_data="reference_menu"
+    )
+    like_history_button = InlineKeyboardButton(
+        text="Liked Profiles 🩵",
+        callback_data="history"
     )
     markup = InlineKeyboardMarkup(
         inline_keyboard=[
             [registration_button],
             [my_profile_button],
-            [profile_button]
+            [profiles_button],
+            [reference_button],
+            [like_history_button],
         ]
     )
     return markup
